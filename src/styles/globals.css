@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --bg-base: #020409;
+    --bg-base: #030511;
     --electric-blue: #1d4ed8;
     --electric-cyan: #38bdf8;
     --violet-accent: #a855f7;
@@ -43,21 +43,21 @@
 }
 
 .glass-badge {
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Subtle, calibrated italic gradient accents matching reference */
+/* Exact, luminous italic gradient accents sampled directly from reference */
 .gradient-accent-future {
-  background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 50%, #a5b4fc 100%);
+  background: linear-gradient(135deg, #fdf4ff 0%, #e9d5ff 32%, #c084fc 70%, #a855f7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-accent-of {
-  background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 50%, #d946ef 100%);
+  background: linear-gradient(135deg, #fdf2f8 0%, #f472b6 38%, #d946ef 74%, #9333ea 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
