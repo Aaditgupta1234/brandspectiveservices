@@ -13,24 +13,24 @@ export const Hero: React.FC<HeroProps> = ({ onOpenEnquiry }) => {
   return (
     <section 
       id="hero" 
-      className="relative min-h-screen w-full flex flex-col justify-between pt-28 sm:pt-32 lg:pt-36 overflow-hidden bg-obsidian-950"
+      className="relative min-h-[100dvh] lg:h-[100dvh] w-full flex flex-col justify-between pt-16 sm:pt-20 lg:pt-16 overflow-hidden bg-obsidian-950"
     >
-      {/* Cinematic Layered Lighting Beam & Glow */}
+      {/* Cinematic Anamorphic Lighting Beam */}
       <GlowBackground />
 
-      {/* Main Hero Viewport Content */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 my-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
+      {/* Hero Viewport Content Grid */}
+      <div className="relative z-10 max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 my-auto flex-1 flex flex-col justify-center min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center py-2 lg:py-0 w-full min-w-0">
           
-          {/* Left Column: Narrative, Typography & Actions (Spans 7 cols on desktop) */}
-          <div className="lg:col-span-7 flex flex-col justify-center space-y-8 py-4 sm:py-6">
+          {/* Left Column: Authentic Typography & Actions */}
+          <div className="lg:col-span-7 flex flex-col justify-center space-y-5 sm:space-y-6 min-w-0 w-full">
             <HeroHeadline />
             <HeroActions onOpenEnquiry={onOpenEnquiry} />
           </div>
 
-          {/* Right Column: High-Fidelity 3D Metallic Cage Sculpture (Spans 5 cols on desktop, overflowing slightly to the right) */}
-          <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end">
-            <div className="w-full max-w-[540px] lg:max-w-none lg:w-[125%] lg:-mr-[18%]">
+          {/* Right Column: 3D Metallic Sculpture with Complete Silhouette Visibility */}
+          <div className="lg:col-span-5 relative flex items-center justify-center min-w-0 w-full overflow-hidden">
+            <div className="w-full max-w-[480px] lg:max-w-none">
               <Hero3DCube />
             </div>
           </div>
@@ -38,10 +38,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenEnquiry }) => {
         </div>
       </div>
 
-      {/* Bottom Hero Partner Logo Strip */}
+      {/* Bottom Hero Platform Ribbon */}
       <ClientLogoMarquee />
 
     </section>
   );
 };
-

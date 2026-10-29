@@ -14,7 +14,7 @@ export const Hero3DCube: React.FC = () => {
     // Check WebGL availability
     try {
       const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
       if (!gl) {
         setIsSupported(false);
         return;
@@ -27,30 +27,72 @@ export const Hero3DCube: React.FC = () => {
     // Scene Setup
     const scene = new THREE.Scene();
 
-    // Camera Setup with matching perspective
-    const width = container.clientWidth || 600;
-    const height = container.clientHeight || 600;
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0.2, 8.5);
+    // Camera Setup - Calibrated framing to guarantee complete silhouette visibility
+    const rect = container.getBoundingClientRect();
+    const width = rect.width || container.clientWidth || 360;
+    const height = rect.height || container.clientHeight || 360;
+    const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 100);
+    camera.position.set(0, 0.1, 8.4);
 
-    // Renderer Setup
+    // WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
       powerPreference: 'high-performance',
     });
-    renderer.setSize(width, height);
+    renderer.setSize(width, height, false);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.2;
+
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
+    renderer.domElement.style.maxWidth = '100%';
+    renderer.domElement.style.display = 'block';
     container.appendChild(renderer.domElement);
 
-    // Build the Parametric Hollow Beveled Cage Cube
-    // Dimensions calibrated to match the reference hero proportions
-    const c = 1.5;      // Center offset of beams
-    const T = 0.58;     // Beam thickness
-    const r = 0.16;     // Bevel radius
-    const segs = 5;     // Segment resolution for smooth fillets
+    // Procedural Studio Environment Map for realistic metallic surface reflections
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator.compileEquirectangularShader();
+
+    const envCanvas = document.createElement('canvas');
+    envCanvas.width = 512;
+    envCanvas.height = 256;
+    const ctx = envCanvas.getContext('2d');
+    if (ctx) {
+      // Dark space gradient
+      const grad = ctx.createLinearGradient(0, 0, 512, 256);
+      grad.addColorStop(0, '#020409');
+      grad.addColorStop(0.25, '#061330');
+      grad.addColorStop(0.5, '#1e40af');
+      grad.addColorStop(0.75, '#0b1633');
+      grad.addColorStop(1, '#020409');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Luminous studio light band for crisp chamfer specular reflections
+      const lightStrip = ctx.createLinearGradient(0, 90, 512, 160);
+      lightStrip.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      lightStrip.addColorStop(0.3, 'rgba(56, 189, 248, 0.75)');
+      lightStrip.addColorStop(0.5, 'rgba(217, 70, 239, 0.55)');
+      lightStrip.addColorStop(0.7, 'rgba(37, 99, 235, 0.7)');
+      lightStrip.addColorStop(1, 'rgba(56, 189, 248, 0)');
+      ctx.fillStyle = lightStrip;
+      ctx.fillRect(0, 85, 512, 75);
+    }
+
+    const envTexture = new THREE.CanvasTexture(envCanvas);
+    envTexture.mapping = THREE.EquirectangularReflectionMapping;
+    const envMap = pmremGenerator.fromEquirectangular(envTexture).texture;
+    scene.environment = envMap;
+
+    // Parametric Hollow Beveled Cage Cube
+    // Refined dimensions: slimmer beams (T=0.38) and smooth fillets (r=0.12)
+    // to reduce visual bulk and match reference's architectural, sculpted look
+    const c = 1.55;     // Center offset of beams
+    const T = 0.38;     // Beam thickness
+    const r = 0.12;     // Bevel fillet radius
+    const segs = 4;     // Smooth fillet resolution
 
     const geoms: THREE.BufferGeometry[] = [];
 
@@ -92,74 +134,66 @@ export const Hero3DCube: React.FC = () => {
       }
     }
 
-    // Merge into a single seamless geometry and weld vertices for continuous normals
+    // Seamless geometric weld
     const mergedGeometry = mergeGeometries(geoms);
     const weldedGeometry = mergeVertices(mergedGeometry, 0.02);
     weldedGeometry.computeVertexNormals();
 
-    // High-fidelity Metallic Lacquer Material matching the reference screenshot
+    // High-End Lacquered Sapphire Metallic Material
+    // Replaces flat cartoon blue with lustrous deep cobalt sapphire, crisp highlights, and violet chamfers
     const cubeMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#1048e8'),          // Deep electric sapphire base
-      emissive: new THREE.Color('#03114a'),       // Subtle deep emissive foundation
-      roughness: 0.16,                            // Smooth polished gloss
-      metalness: 0.88,                            // High metallic reflectivity
-      clearcoat: 0.95,                            // Protective lacquer coat
-      clearcoatRoughness: 0.08,                   // High specular crispness
+      color: new THREE.Color('#14387d'),          // Deep electric cobalt sapphire base
+      metalness: 0.92,                            // True metallic reflectivity
+      roughness: 0.16,                            // Smooth glossy specular
+      clearcoat: 0.92,                            // High-end clearcoat lacquer
+      clearcoatRoughness: 0.10,
       reflectivity: 0.95,
-      specularIntensity: 1.0,
-      specularColor: new THREE.Color('#38bdf8'),  // Electric cyan highlight reflection
+      specularIntensity: 1.2,
+      specularColor: new THREE.Color('#93c5fd'),  // Luminous specular glint along beveled edges
     });
 
     const cubeMesh = new THREE.Mesh(weldedGeometry, cubeMaterial);
     
-    // Initial orientation matching the reference screenshot:
-    // Slightly rotated around Y (showing two sides) and tilted down around X (showing top face)
-    const baseRotationX = 0.32;
-    const baseRotationY = -0.58;
-    const baseRotationZ = 0.06;
+    // Exact resting orientation matching reference screenshot
+    const baseRotationX = 0.28;
+    const baseRotationY = -0.52;
+    const baseRotationZ = 0.04;
 
     cubeMesh.rotation.set(baseRotationX, baseRotationY, baseRotationZ);
-    cubeMesh.scale.set(1.22, 1.22, 1.22);
-    // Positioned slightly right and slightly down
-    cubeMesh.position.set(0.65, -0.05, 0);
+    cubeMesh.scale.set(1.18, 1.18, 1.18);
+    cubeMesh.position.set(0.18, 0, 0);
 
     scene.add(cubeMesh);
 
-    // Sophisticated Multi-Point Lighting Rig matching the reference screenshot
+    // Multi-Point Cinematic Studio Lighting Rig
     // 1. Ambient Fill: Deep midnight blue
-    const ambientLight = new THREE.AmbientLight(new THREE.Color('#041038'), 2.2);
+    const ambientLight = new THREE.AmbientLight(new THREE.Color('#0a1b42'), 1.8);
     scene.add(ambientLight);
 
-    // 2. Primary Key Light: Intense electric cyan / ice blue from top-left-front
-    const keyLight = new THREE.DirectionalLight(new THREE.Color('#38bdf8'), 4.8);
-    keyLight.position.set(-5, 6, 6);
+    // 2. Primary Key Light: Ice Cyan from top-left-front (sharp specular reflection along vertical pillar)
+    const keyLight = new THREE.DirectionalLight(new THREE.Color('#93c5fd'), 4.2);
+    keyLight.position.set(-4.5, 5.5, 6.0);
     scene.add(keyLight);
 
-    // 3. Top Blue Accent Light: Illuminating the top horizontal beams
-    const topLight = new THREE.DirectionalLight(new THREE.Color('#60a5fa'), 3.2);
-    topLight.position.set(3, 8, 2);
+    // 3. Top Blue Accent Light: Illuminating top beveled faces
+    const topLight = new THREE.DirectionalLight(new THREE.Color('#60a5fa'), 2.6);
+    topLight.position.set(1.5, 7.0, 2.5);
     scene.add(topLight);
 
-    // 4. Rim / Bounce Light: Vivid Magenta & Violet from bottom-right / rear
-    // Creates the signature violet specular glow along the inner edges and bottom bevels
-    const violetRimLight = new THREE.DirectionalLight(new THREE.Color('#d946ef'), 5.2);
-    violetRimLight.position.set(6, -5, -3);
+    // 4. Subtle Violet Rim Light: Violet/magenta rim highlight on bottom-right beveled chamfers
+    const violetRimLight = new THREE.DirectionalLight(new THREE.Color('#d946ef'), 3.2);
+    violetRimLight.position.set(5.5, -4.5, -3.0);
     scene.add(violetRimLight);
 
-    // 5. Secondary Violet Fill: Softening shadow edges
-    const purpleBounce = new THREE.PointLight(new THREE.Color('#a855f7'), 3.0, 15);
-    purpleBounce.position.set(2, -3, 2);
-    scene.add(purpleBounce);
-
-    // 6. Hollow Core Point Light: Soft glowing inner core
-    const coreLight = new THREE.PointLight(new THREE.Color('#00d4ff'), 2.0, 8);
-    coreLight.position.set(0.65, -0.05, 0);
+    // 5. Hollow Core Glow: Soft cyan fill inside cavity
+    const coreLight = new THREE.PointLight(new THREE.Color('#38bdf8'), 1.2, 7);
+    coreLight.position.set(0.2, 0, 0);
     scene.add(coreLight);
 
     // Reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Mouse Interaction State
+    // Interactive Mouse Tilt State
     let targetRotationX = baseRotationX;
     let targetRotationY = baseRotationY;
     let mouseX = 0;
@@ -197,9 +231,9 @@ export const Hero3DCube: React.FC = () => {
     );
     observer.observe(container);
 
-    // Animation Loop
+    // Smooth Animation Loop
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
@@ -208,24 +242,24 @@ export const Hero3DCube: React.FC = () => {
 
       const elapsedTime = clock.getElapsedTime();
 
-      // Subtle resting float oscillation (idle breathing)
-      const floatY = prefersReducedMotion ? 0 : Math.sin(elapsedTime * 0.8) * 0.08;
-      const floatRotZ = prefersReducedMotion ? 0 : Math.cos(elapsedTime * 0.6) * 0.02;
+      // Gentle resting float (subtle breathing)
+      const floatY = prefersReducedMotion ? 0 : Math.sin(elapsedTime * 0.7) * 0.05;
+      const floatRotZ = prefersReducedMotion ? 0 : Math.cos(elapsedTime * 0.5) * 0.015;
 
-      cubeMesh.position.y = -0.05 + floatY;
+      cubeMesh.position.y = floatY;
 
       // Inertial mouse tilt
       if (isHovering && !prefersReducedMotion) {
-        targetRotationY = baseRotationY + mouseX * 0.28;
-        targetRotationX = baseRotationX - mouseY * 0.22;
+        targetRotationY = baseRotationY + mouseX * 0.22;
+        targetRotationX = baseRotationX - mouseY * 0.16;
       } else {
-        targetRotationY = baseRotationY + (prefersReducedMotion ? 0 : Math.sin(elapsedTime * 0.4) * 0.04);
-        targetRotationX = baseRotationX + (prefersReducedMotion ? 0 : Math.cos(elapsedTime * 0.5) * 0.03);
+        targetRotationY = baseRotationY + (prefersReducedMotion ? 0 : Math.sin(elapsedTime * 0.35) * 0.025);
+        targetRotationX = baseRotationX + (prefersReducedMotion ? 0 : Math.cos(elapsedTime * 0.4) * 0.02);
       }
 
       // Smooth dampening
-      cubeMesh.rotation.y += (targetRotationY - cubeMesh.rotation.y) * 0.06;
-      cubeMesh.rotation.x += (targetRotationX - cubeMesh.rotation.x) * 0.06;
+      cubeMesh.rotation.y += (targetRotationY - cubeMesh.rotation.y) * 0.05;
+      cubeMesh.rotation.x += (targetRotationX - cubeMesh.rotation.x) * 0.05;
       cubeMesh.rotation.z = baseRotationZ + floatRotZ;
 
       renderer.render(scene, camera);
@@ -233,33 +267,34 @@ export const Hero3DCube: React.FC = () => {
 
     animate();
 
-    // Responsive Resize Handler
+    // Responsive Resize & Framing Calibration
     const handleResize = () => {
       if (!container) return;
-      const newWidth = container.clientWidth;
-      const newHeight = container.clientHeight;
+      const rect = container.getBoundingClientRect();
+      const newWidth = rect.width || container.clientWidth || 360;
+      const newHeight = rect.height || container.clientHeight || 360;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
+      renderer.setSize(newWidth, newHeight, false);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      // Responsive positioning calibration
-      if (newWidth < 768) {
-        cubeMesh.scale.set(0.85, 0.85, 0.85);
-        cubeMesh.position.set(0, -0.4, 0);
+      // Controlled scale to prevent clipping across viewports
+      if (newWidth < 640) {
+        cubeMesh.scale.set(0.78, 0.78, 0.78);
+        cubeMesh.position.set(0, 0, 0);
       } else if (newWidth < 1024) {
-        cubeMesh.scale.set(1.05, 1.05, 1.05);
-        cubeMesh.position.set(0.35, -0.1, 0);
+        cubeMesh.scale.set(0.95, 0.95, 0.95);
+        cubeMesh.position.set(0.05, 0, 0);
       } else {
-        cubeMesh.scale.set(1.25, 1.25, 1.25);
-        cubeMesh.position.set(0.65, -0.05, 0);
+        cubeMesh.scale.set(1.18, 1.18, 1.18);
+        cubeMesh.position.set(0.18, 0, 0);
       }
     };
 
     window.addEventListener('resize', handleResize);
     handleResize();
 
-    // Resource Cleanup & GPU Disposal
+    // Cleanup & GPU Resource Disposal
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
@@ -267,11 +302,13 @@ export const Hero3DCube: React.FC = () => {
       observer.disconnect();
       cancelAnimationFrame(animationFrameId);
 
-      // Dispose Three.js objects
       geoms.forEach((g) => g.dispose());
       mergedGeometry.dispose();
       weldedGeometry.dispose();
       cubeMaterial.dispose();
+      envTexture.dispose();
+      envMap.dispose();
+      pmremGenerator.dispose();
       renderer.dispose();
 
       if (renderer.domElement && container.contains(renderer.domElement)) {
@@ -283,16 +320,15 @@ export const Hero3DCube: React.FC = () => {
   return (
     <div 
       ref={containerRef} 
-      className="relative w-full h-[480px] sm:h-[560px] lg:h-[680px] flex items-center justify-center overflow-visible select-none"
-      aria-label="3D metallic sculpture representing multi-dimensional brand architecture"
+      className="relative w-full max-w-full h-[280px] sm:h-[360px] lg:h-[450px] flex items-center justify-center overflow-hidden select-none"
+      aria-label="Art-directed 3D metallic cage sculpture"
       role="img"
     >
       {!isSupported && (
         <div className="text-xs text-slate-400 p-4 border border-white/10 rounded-xl bg-obsidian-900/60 backdrop-blur-md">
-          WebGL preview unavailable on this device.
+          Interactive preview unavailable on this device.
         </div>
       )}
     </div>
   );
 };
-
