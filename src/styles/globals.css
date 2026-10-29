@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-base: #02040a;
+    --electric-blue: #1d4ed8;
+    --electric-cyan: #38bdf8;
+    --violet-accent: #a855f7;
+  }
+
+  body {
+    background-color: var(--bg-base);
+    color: #f1f5f9;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom backdrop blurs and subtle glassmorphic borders */
+.glass-pill {
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+}
+
+.glass-pill:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.glass-badge {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+/* Gradient text utility for the reference's italic accent words */
+.gradient-accent-future {
+  background: linear-gradient(135deg, #c084fc 0%, #e879f9 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-accent-of {
+  background: linear-gradient(135deg, #f472b6 0%, #d946ef 50%, #9333ea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Smooth logo marquee mask */
+.mask-marquee {
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
