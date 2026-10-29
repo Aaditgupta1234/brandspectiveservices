@@ -5,25 +5,36 @@ import { brandConfig } from '../../data/brandConfig';
 interface EnquiryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultService?: string;
 }
 
 const serviceOptions = [
-  "Amazon Advertising",
-  "Flipkart Advertising",
-  "Google Ads",
-  "Meta Ads (IG & FB)",
-  "Quick Commerce (Blinkit/Zepto)",
-  "Social Media Management",
-  "Influencer Marketing",
-  "Website Development",
+  "Amazon Advertising & Management",
+  "Flipkart Advertising & PLA",
+  "Quick Commerce (Blinkit / Zepto / Instamart)",
+  "Google Ads & Performance Max",
+  "Meta Ads (Instagram & Facebook)",
+  "Social Media Strategy",
+  "Performance Influencer Marketing",
+  "Custom E-Commerce Storefront",
 ];
 
-export const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) => {
+export const EnquiryModal: React.FC<EnquiryModalProps> = ({ 
+  isOpen, 
+  onClose,
+  defaultService = serviceOptions[0]
+}) => {
   const [name, setName] = useState('');
   const [brandName, setBrandName] = useState('');
   const [phone, setPhone] = useState('');
-  const [selectedService, setSelectedService] = useState(serviceOptions[0]);
+  const [selectedService, setSelectedService] = useState(defaultService);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (defaultService) {
+      setSelectedService(defaultService);
+    }
+  }, [defaultService]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,12 +61,12 @@ export const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) =
       window.open(`https://wa.me/${brandConfig.contact.whatsappNumber}?text=${message}`, '_blank');
       onClose();
       setSubmitted(false);
-    }, 900);
+    }, 700);
   };
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-obsidian-950/80 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-950/60 backdrop-blur-sm animate-fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -64,16 +75,13 @@ export const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) =
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-lg rounded-2xl bg-obsidian-900 border border-white/10 shadow-2xl p-6 sm:p-8 z-10 overflow-hidden">
+      <div className="relative w-full max-w-lg rounded-2xl bg-white border border-sand-300 shadow-2xl p-6 sm:p-8 z-10 text-left">
         
-        {/* Glow accent */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-electric-cyan/20 blur-3xl pointer-events-none" />
-
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-lg text-ink-400 hover:text-ink-900 hover:bg-sand-100 transition-colors focus-ring"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
@@ -81,81 +89,87 @@ export const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) =
 
         {submitted ? (
           <div className="py-12 text-center space-y-4">
-            <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto animate-bounce" />
-            <h3 className="text-xl font-bold text-white">Opening WhatsApp...</h3>
-            <p className="text-sm text-slate-400">
-              Connecting you directly with BrandSpective&apos;s senior growth team.
+            <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-semibold text-ink-900">Connecting to WhatsApp...</h3>
+            <p className="text-sm text-ink-500 max-w-xs mx-auto">
+              Opening a direct conversation with BrandSpective&apos;s senior growth team.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-medium text-electric-cyan mb-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sand-100 border border-sand-300 text-[10px] font-mono uppercase tracking-wider text-cobalt-700 font-semibold mb-2">
                 <MessageSquare className="w-3 h-3" />
-                <span>Dehradun Growth HQ</span>
+                <span>Dehradun Growth HQ · Direct Connect</span>
               </div>
-              <h2 id="modal-title" className="text-2xl font-bold text-white tracking-tight">
-                Scale Your Brand With Us
+              <h2 id="modal-title" className="text-2xl font-semibold text-ink-900 tracking-tight">
+                Let&apos;s discuss your brand.
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                Share your brand details for a tailored audit & growth roadmap.
+              <p className="text-xs text-ink-500 mt-1">
+                Tell us about your requirements and we will review your brand within 24 hours.
               </p>
             </div>
 
-            <div className="space-y-4 text-left">
+            <div className="space-y-4 pt-1">
+              {/* Full Name */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                  Your Name
+                <label className="block text-xs font-semibold uppercase tracking-wider text-ink-700 mb-1.5">
+                  Your Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Alex Sharma"
+                  placeholder="e.g. Aditi Sharma"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-obsidian-950 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-electric-cyan transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-sand-300 bg-sand-50/50 text-sm text-ink-900 placeholder-ink-300 focus:outline-none focus:ring-2 focus:ring-cobalt-700/20 focus:border-cobalt-700 transition-colors"
                 />
               </div>
 
+              {/* Brand Name */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                  Brand Name / Website
+                <label className="block text-xs font-semibold uppercase tracking-wider text-ink-700 mb-1.5">
+                  Brand / Company Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Acme Naturals / acme.in"
+                  placeholder="e.g. Auric Organics"
                   value={brandName}
                   onChange={(e) => setBrandName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-obsidian-950 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-electric-cyan transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-sand-300 bg-sand-50/50 text-sm text-ink-900 placeholder-ink-300 focus:outline-none focus:ring-2 focus:ring-cobalt-700/20 focus:border-cobalt-700 transition-colors"
                 />
               </div>
 
+              {/* Phone / WhatsApp */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                  WhatsApp Phone Number
+                <label className="block text-xs font-semibold uppercase tracking-wider text-ink-700 mb-1.5">
+                  WhatsApp Number <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="tel"
                   required
-                  placeholder="+91 98765 XXXXX"
+                  placeholder="e.g. +91 98765 43210"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-obsidian-950 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-electric-cyan transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-sand-300 bg-sand-50/50 text-sm text-ink-900 placeholder-ink-300 focus:outline-none focus:ring-2 focus:ring-cobalt-700/20 focus:border-cobalt-700 transition-colors"
                 />
               </div>
 
+              {/* Service Required */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-ink-700 mb-1.5">
                   Primary Service Interest
                 </label>
                 <select
                   value={selectedService}
                   onChange={(e) => setSelectedService(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-obsidian-950 border border-white/10 text-white text-sm focus:outline-none focus:border-electric-cyan transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-sand-300 bg-sand-50/50 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-cobalt-700/20 focus:border-cobalt-700 transition-colors"
                 >
                   {serviceOptions.map((opt) => (
-                    <option key={opt} value={opt} className="bg-obsidian-900 text-white">
+                    <option key={opt} value={opt}>
                       {opt}
                     </option>
                   ))}
@@ -163,13 +177,20 @@ export const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) =
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full mt-2 inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-white text-slate-950 font-semibold text-sm hover:bg-slate-100 shadow-glow-pill transition-all active:scale-98"
-            >
-              <span>Connect on WhatsApp</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {/* Submit Action */}
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="w-full group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-ink-900 text-white font-medium text-sm hover:bg-cobalt-700 active:scale-[0.99] transition-all duration-200 shadow-sm focus-ring"
+              >
+                <span>Connect via WhatsApp</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+              </button>
+            </div>
+
+            <p className="text-[11px] font-mono text-ink-400 text-center">
+              Direct connection to agency founders. No spam guaranteed.
+            </p>
           </form>
         )}
 
@@ -177,4 +198,3 @@ export const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, onClose }) =
     </div>
   );
 };
-

@@ -1,109 +1,142 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
 import { brandConfig } from '../../data/brandConfig';
+import { BrandLogo } from '../brand/BrandLogo';
 
 interface NavbarProps {
   onOpenContact?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
-  const [activeTab, setActiveTab] = useState('Home');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isMobileMenuOpen]);
+
+  const handleNavClick = (href: string) => {
+    setIsMobileMenuOpen(false);
+    if (href === '#contact' && onOpenContact) {
+      onOpenContact();
+    }
+  };
+
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 pointer-events-none ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled 
-          ? 'py-2.5 sm:py-3.5 bg-obsidian-950/85 backdrop-blur-lg border-b border-white/[0.06] shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
-          : 'py-4 sm:py-6'
+          ? 'py-3.5 bg-[#F8F8F5]/90 backdrop-blur-md border-b border-sand-300 shadow-subtle' 
+          : 'py-5 bg-transparent'
       }`}
     >
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
-        {/* Brand Monogram Mark (Left) */}
+        {/* Brand Logo (Left) */}
         <a 
           href="#hero" 
-          className="pointer-events-auto flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-electric-cyan/40 rounded-full py-1 transition-all"
-          aria-label="BrandSpective Services"
+          className="group flex items-center focus-ring rounded-lg py-1 pr-2 transition-opacity hover:opacity-90"
+          aria-label="BrandSpective Services Home"
         >
-          {/* Architectural Stylized Glyph */}
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center backdrop-blur-md group-hover:border-white/25 transition-all duration-200">
-            <svg 
-              className="w-4 h-4 sm:w-5 sm:h-5 text-white/95 transition-transform group-hover:scale-105" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Sleek architectural ribbon monogram */}
-              <path 
-                d="M5 6C5 4.89543 5.89543 4 7 4H14C17.3137 4 20 6.68629 20 10C20 12.2206 18.7915 14.1593 17 15.1973C18.8353 16.2081 20 18.2144 20 20.5C20 21.3284 19.3284 22 18.5 22H7C5.89543 22 5 21.1046 5 20V6Z" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-              <path 
-                d="M5 13H14C15.6569 13 17 11.6569 17 10C17 8.34315 15.6569 7 14 7H5" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-              />
-            </svg>
-          </div>
-          <span className="font-semibold text-xs sm:text-sm tracking-tight text-white/90 group-hover:text-white transition-colors">
-            BrandSpective
-          </span>
+          <BrandLogo variant="dark" />
         </a>
 
-        {/* Floating Capsule Menu (Center) - Authentic Reference Styling */}
+        {/* Desktop Navigation Links (Center) */}
         <nav 
           aria-label="Main Navigation" 
-          className="pointer-events-auto hidden md:flex items-center gap-1 px-1.5 py-1 rounded-full glass-pill"
+          className="hidden md:flex items-center gap-7 lg:gap-8"
         >
-          {brandConfig.navigation.map((item) => {
-            const isActive = activeTab === item.label;
-            return (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setActiveTab(item.label)}
-                className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 flex items-center gap-1 ${
-                  isActive 
-                    ? 'bg-white/12 text-white shadow-sm' 
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-                }`}
-              >
-                <span>{item.label}</span>
-                {item.hasDropdown && (
-                  <ChevronDown className="w-3 h-3 text-slate-400 opacity-75" />
-                )}
-              </a>
-            );
-          })}
+          {brandConfig.navigation.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="text-[13.5px] font-medium text-ink-700 hover:text-cobalt-700 transition-colors duration-150 relative py-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-cobalt-700 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
 
         {/* Primary Contact CTA (Right) */}
-        <div className="pointer-events-auto flex items-center shrink-0">
+        <div className="hidden sm:flex items-center gap-3">
           <button
             type="button"
             onClick={onOpenContact}
-            className="group inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full bg-white text-slate-950 font-semibold text-xs sm:text-sm tracking-tight hover:bg-slate-100 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/80"
+            className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-ink-900 text-white font-medium text-xs sm:text-sm tracking-tight hover:bg-cobalt-700 active:scale-[0.98] transition-all duration-200 focus-ring shadow-sm"
           >
             <span>Let&apos;s Talk</span>
             <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
           </button>
         </div>
 
+        {/* Mobile Menu Toggle Button */}
+        <div className="flex sm:hidden items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 rounded-lg text-ink-800 hover:bg-sand-200 focus-ring transition-colors"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
       </div>
+
+      {/* Mobile Drawer Navigation */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 top-[61px] z-50 bg-[#F8F8F5] border-t border-sand-300 flex flex-col justify-between p-6 sm:hidden overflow-y-auto">
+          <div className="space-y-6 pt-4">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-400">
+              Navigation
+            </div>
+            <nav className="flex flex-col space-y-4">
+              {brandConfig.navigation.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => handleNavClick(item.href)}
+                  className="text-2xl font-serif font-medium text-ink-900 hover:text-cobalt-700 transition-colors"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="space-y-4 pt-8 border-t border-sand-300">
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                onOpenContact?.();
+              }}
+              className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-lg bg-ink-900 text-white font-medium text-sm hover:bg-cobalt-700 transition-colors shadow-sm"
+            >
+              <span>Start an Enquiry</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <div className="text-center text-xs text-ink-500">
+              Dehradun, Uttarakhand, India
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
