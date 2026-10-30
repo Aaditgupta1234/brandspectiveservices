@@ -9,7 +9,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact }) => {
   return (
     <section 
       id="hero" 
-      className="relative pt-32 pb-16 sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-28 overflow-hidden bg-[#F8F8F5] border-b border-sand-300"
+      className="relative pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-24 lg:pb-16 overflow-hidden bg-[#F8F8F5] border-b border-sand-300"
     >
       {/* Background Subtle Architectural Grid Accent */}
       <div className="absolute inset-0 editorial-grid-pattern opacity-60 pointer-events-none" />
@@ -60,9 +60,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact }) => {
             </div>
 
             {/* Credibility Snapshot Metadata */}
-            <div className="pt-4 border-t border-sand-300/80 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-ink-500">
-              <div className="flex items-center gap-2">
-                <Compass className="w-4 h-4 text-cobalt-700" />
+            <div className="pt-4 border-t border-sand-300/80 flex flex-wrap items-center gap-3 sm:gap-5 text-[11px] sm:text-xs text-ink-500">
+              <div className="flex items-center gap-1.5">
+                <Compass className="w-3.5 h-3.5 text-cobalt-700" />
                 <span>Headquartered in Dehradun, Uttarakhand</span>
               </div>
               <div className="hidden sm:inline text-sand-400">·</div>
