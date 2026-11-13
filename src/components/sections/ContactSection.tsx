@@ -32,7 +32,7 @@ export const ContactSection: React.FC = () => {
   return (
     <section 
       id="contact" 
-      className="py-24 sm:py-32 bg-[#F8F8F5] border-b border-sand-300 relative"
+      className="py-24 sm:py-32 bg-[#F8F9FA] border-b border-sand-300 relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

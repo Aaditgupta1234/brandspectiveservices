@@ -9,7 +9,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact }) => {
   return (
     <section 
       id="hero" 
-      className="relative pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-24 lg:pb-16 overflow-hidden bg-[#F8F8F5] border-b border-sand-300"
+      className="relative pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-24 lg:pb-16 overflow-hidden bg-[#F8F9FA] border-b border-sand-300"
     >
       {/* Background Subtle Architectural Grid Accent */}
       <div className="absolute inset-0 editorial-grid-pattern opacity-60 pointer-events-none" />

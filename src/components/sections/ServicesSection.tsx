@@ -57,7 +57,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
             {marketplaceGroup?.services.map((service, index) => (
               <div
                 key={service.id}
-                className="p-6 sm:p-7 rounded-2xl bg-[#F8F8F5] border border-sand-300 flex flex-col justify-between hover:border-sand-400 transition-colors shadow-subtle text-left group"
+                className="p-6 sm:p-7 rounded-2xl bg-[#F8F9FA] border border-sand-300 flex flex-col justify-between hover:border-sand-400 transition-colors shadow-subtle text-left group"
               >
                 <div>
                   <div className="flex items-center justify-between pb-3 border-b border-sand-300 text-[10px] font-mono text-ink-400 uppercase tracking-wider">
@@ -133,7 +133,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
             {performanceGroup?.services.map((service, index) => (
               <div
                 key={service.id}
-                className="p-6 sm:p-7 rounded-2xl bg-[#F8F8F5] border border-sand-300 flex flex-col justify-between hover:border-sand-400 transition-colors shadow-subtle text-left group"
+                className="p-6 sm:p-7 rounded-2xl bg-[#F8F9FA] border border-sand-300 flex flex-col justify-between hover:border-sand-400 transition-colors shadow-subtle text-left group"
               >
                 <div>
                   <div className="flex items-center justify-between pb-3 border-b border-sand-300 text-[10px] font-mono text-ink-400 uppercase tracking-wider">
@@ -209,7 +209,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
           {digitalGroup?.services.map((service) => (
             <div 
               key={service.id}
-              className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-[#F8F8F5] via-white to-sand-100 border border-sand-300 shadow-card"
+              className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-[#F8F9FA] via-white to-sand-100 border border-sand-300 shadow-card"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 <div className="lg:col-span-7 space-y-4">

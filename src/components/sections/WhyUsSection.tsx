@@ -35,7 +35,7 @@ export const WhyUsSection: React.FC = () => {
             return (
               <div
                 key={principle.number}
-                className="group p-8 rounded-2xl bg-[#F8F8F5] border border-sand-300 hover:border-cobalt-700/40 hover:bg-white transition-all duration-300 flex flex-col justify-between shadow-subtle"
+                className="group p-8 rounded-2xl bg-[#F8F9FA] border border-sand-300 hover:border-cobalt-700/40 hover:bg-white transition-all duration-300 flex flex-col justify-between shadow-subtle"
               >
                 <div>
                   {/* Top Bar with Number and Icon */}
@@ -73,7 +73,7 @@ export const WhyUsSection: React.FC = () => {
         </div>
 
         {/* Comparison Strip: Us vs Standard Agencies */}
-        <div className="mt-16 rounded-2xl border border-sand-300 bg-[#F8F8F5] p-6 sm:p-8 text-left">
+        <div className="mt-16 rounded-2xl border border-sand-300 bg-[#F8F9FA] p-6 sm:p-8 text-left">
           <div className="text-xs font-mono uppercase tracking-wider text-ink-400 mb-4">
             COMMERCIAL STANDARD OF ACCOUNTABILITY
           </div>

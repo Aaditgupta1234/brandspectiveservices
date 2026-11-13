@@ -5,7 +5,7 @@ export const PlatformsSection: React.FC = () => {
   return (
     <section 
       id="platforms" 
-      className="py-16 sm:py-20 bg-[#F8F8F5] border-b border-sand-300"
+      className="py-16 sm:py-20 bg-[#F8F9FA] border-b border-sand-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

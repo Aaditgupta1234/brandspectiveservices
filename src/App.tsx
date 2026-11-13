@@ -22,7 +22,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#F8F8F5] text-ink-900 flex flex-col font-sans selection:bg-cobalt-700/15 selection:text-ink-900 antialiased">
+    <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#F8F9FA] text-ink-900 flex flex-col font-sans selection:bg-cobalt-700/15 selection:text-ink-900 antialiased">
       {/* 01. Refined Navigation Bar */}
       <Navbar onOpenContact={() => handleOpenContact()} />
 

@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
     <header 
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled 
-          ? 'py-3.5 bg-[#F8F8F5]/90 backdrop-blur-md border-b border-sand-300 shadow-subtle' 
+          ? 'py-3.5 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-sand-300 shadow-subtle' 
           : 'py-5 bg-transparent'
       }`}
     >
@@ -100,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
       {/* Mobile Drawer Navigation */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-[61px] z-50 bg-[#F8F8F5] border-t border-sand-300 flex flex-col justify-between p-6 sm:hidden overflow-y-auto">
+        <div className="fixed inset-0 top-[61px] z-50 bg-[#F8F9FA] border-t border-sand-300 flex flex-col justify-between p-6 sm:hidden overflow-y-auto">
           <div className="space-y-6 pt-4">
             <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-400">
               Navigation

@@ -7,53 +7,56 @@ export default {
   theme: {
     extend: {
       colors: {
-        canvas: '#F8F8F5',
+        canvas: '#F8F9FA',
         ink: {
-          950: '#111317',
-          900: '#17191F', // Primary typography
-          800: '#272B33',
-          700: '#3A3F4B',
-          500: '#5A606E', // Muted secondary body text
-          400: '#7E8594',
-          300: '#A6ACB8',
-          200: '#D2D6DE',
-          100: '#EAECEF',
-          50: '#F4F5F7',
+          950: '#111215',
+          900: '#1C1E23', // Primary deep graphite typography
+          800: '#2E3037',
+          700: '#42454E',
+          600: '#58585A', // Exact official Logo Charcoal
+          500: '#6A6D76', // Muted secondary body text
+          400: '#8B8E97',
+          300: '#B5B8C1',
+          200: '#DADBDF',
+          100: '#ECEEF0',
+          50: '#F5F6F8',
         },
         cobalt: {
-          900: '#15344C',
-          800: '#1C496B',
-          700: '#245C86', // Confident brand accent
-          600: '#2E6F9F',
-          500: '#3E87BE',
-          400: '#64A4D4',
-          200: '#B8D9EF',
-          100: '#DCEBF5',
-          50: '#EDF5FA',
+          950: '#0C2237',
+          900: '#133857',
+          800: '#17476F',
+          700: '#1B588D', // Exact official Logo Blue (#1B588D)
+          600: '#1E6BB3',
+          500: '#2881D0',
+          400: '#4B9EE7',
+          300: '#81C1F3',
+          200: '#B9DCF9',
+          100: '#E0EFFC',
+          50: '#F0F6FD',
         },
         lavender: {
-          800: '#48425C',
-          700: '#675E82', // Muted secondary accent
-          600: '#7A7297',
-          400: '#A49CBF',
-          200: '#D5CFE4',
-          100: '#E8E4F1',
-          50: '#F3F0F8',
+          800: '#3D4556',
+          700: '#525C70',
+          600: '#67748C',
+          400: '#919EBA',
+          200: '#C9D2E3',
+          100: '#E4E8F1',
+          50: '#F3F5F9',
         },
         sand: {
-          50: '#FBFBFA',
-          100: '#F8F8F5', // Light neutral primary canvas
-          200: '#F1F1EB',
-          300: '#E6E6DE', // Hairline borders
-          400: '#D5D5CA',
-          500: '#B5B5A7',
+          50: '#FAFAFB',
+          100: '#F4F5F7',
+          200: '#ECEEF1',
+          300: '#E1E3E8', // Hairline borders
+          400: '#C9CCD4',
+          500: '#9FA3AE',
         },
         night: {
-          950: '#0B0D11',
-          900: '#12141A', // Dark storytelling surface
-          800: '#171A22',
-          700: '#222631',
-          600: '#303544',
+          950: '#0A0D12',
+          900: '#0F141C', // Dark storytelling surface
+          800: '#161D28',
+          700: '#202938',
+          600: '#2C374A',
         }
       },
       fontFamily: {

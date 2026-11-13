@@ -55,7 +55,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onOpen
           {testimonials.map((item, idx) => (
             <div
               key={idx}
-              className="p-8 rounded-2xl bg-[#F8F8F5] border border-sand-300 flex flex-col justify-between hover:border-cobalt-700/40 hover:bg-white transition-all duration-300 shadow-subtle"
+              className="p-8 rounded-2xl bg-[#F8F9FA] border border-sand-300 flex flex-col justify-between hover:border-cobalt-700/40 hover:bg-white transition-all duration-300 shadow-subtle"
             >
               <div>
                 {/* Quote Icon & Channel Tag */}

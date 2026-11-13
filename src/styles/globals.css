@@ -4,12 +4,12 @@
 
 @layer base {
   :root {
-    --bg-canvas: #F8F8F5;
-    --text-primary: #17191F;
-    --text-secondary: #5A606E;
-    --accent-cobalt: #245C86;
-    --accent-lavender: #675E82;
-    --border-subtle: #E6E6DE;
+    --bg-canvas: #F8F9FA;
+    --text-primary: #1C1E23;
+    --text-secondary: #6A6D76;
+    --accent-cobalt: #1B588D;
+    --accent-slate: #58585A;
+    --border-subtle: #E1E3E8;
   }
 
   html {
@@ -67,7 +67,7 @@
 .focus-ring:focus-visible {
   outline: 2px solid transparent;
   outline-offset: 2px;
-  box-shadow: 0 0 0 2px #F8F8F5, 0 0 0 4px #245C86;
+  box-shadow: 0 0 0 2px #F8F9FA, 0 0 0 4px #1B588D;
 }
 
 @media (prefers-reduced-motion: reduce) {
